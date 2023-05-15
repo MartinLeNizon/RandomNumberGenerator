@@ -1,0 +1,152 @@
+---
+title: "TP de probabilités"
+authors: Mathis NGUYEN & Martin NIZON
+date: '2023-05-09'
+output:
+  pdf_document: default
+  word_document: default
+---
+## Q2.1
+```{r}
+source('utile.R')
+
+SMT <- 1502 
+SVN <- 3454
+SRA <- 4450
+SSM <- 9432
+Nsimu <- 100
+Nrepet <- 1
+
+
+mt <- MersenneTwister(Nsimu,Nrepet,SMT)
+vn <- VonNeumann(Nsimu,Nrepet,SVN)
+ra <- RANDU(Nsimu,Nrepet,SRA)
+sm <- StandardMinimal(Nsimu,Nrepet,SSM)
+
+par(mfrow=c(2,2))
+hist(mt[,1],xlab='',main='Mersenne Twister')
+hist(vn[,1],xlab='',main='Von Neumann')
+hist(ra[,1],xlab='',main='RANDU')
+hist(sm[,1],xlab='',main='StandardMinimal')
+```
+Pour le générateur de Von Neumann, les résultats sont majoritairement groupés entre 0 et 1000. Les autres générateurs semblent satisfaisants.
+
+## Q2.2
+```{r}
+source('utile.R')
+
+SMT <- 1502 
+SVN <- 3454
+SRA <- 4450
+SSM <- 9432
+Nsimu <- 100
+Nrepet <- 1
+
+
+mt <- MersenneTwister(Nsimu,Nrepet,SMT)
+vn <- VonNeumann(Nsimu,Nrepet,SVN)
+ra <- RANDU(Nsimu,Nrepet,SRA)
+sm <- StandardMinimal(Nsimu,Nrepet,SSM)
+
+par(mfrow=c(2,2))
+plot(mt[1:(Nsimu-1),1],mt[2:Nsimu,1],xlab='MT(i)', ylab='MT(i+1)', main='Mersenne Twister')
+plot(vn[1:(Nsimu-1),1],vn[2:Nsimu,1],xlab='VN(i)', ylab='VN(i+1)', main='Von Neumann')
+plot(ra[1:(Nsimu-1),1],ra[2:Nsimu,1],xlab='RA(i)', ylab='RA(i+1)', main='RANDU')
+plot(sm[1:(Nsimu-1),1],sm[2:Nsimu,1],xlab='SM(i)', ylab='SM(i+1)', main='StandardMinimal')
+```
+On remarque que les points sont éparpillés, sauf pour le générateur de Von Neumann, où elles sont plutôt groupées.
+
+## Q3
+```{r}
+source('utile.R')
+
+SMT <- 1502 
+SVN <- 3454
+SRA <- 4450
+SSM <- 9432
+Nsimu <- 100
+Nrepet <- 100
+
+
+mt <- MersenneTwister(Nsimu,Nrepet,SMT)
+vn <- VonNeumann(Nsimu,Nrepet,SVN)
+ra <- RANDU(Nsimu,Nrepet,SRA)
+sm <- StandardMinimal(Nsimu,Nrepet,SSM)
+
+PvaleurMT <- Frequency(mt,32)
+PvaleurVN <- Frequency(vn,14)
+PvaleurRA <- Frequency(ra,31)
+PvaleurSM <- Frequency(sm,31)
+cat("PValeur MersenneTwister : ",PvaleurMT, "\nPValeur VonNeumann : ",PvaleurVN, "\nPValeur RANDU : ",PvaleurRA, "\nPValeur StandardMinimal : ",PvaleurSM)
+```
+Les générateurs de Von Neumann et RANDU donnent une PValeur inférieure à 0.01 : nous pouvons en déduire que les séquences ne sont pas aléatoires au sens du test de fréquence monobit.
+
+## Q4
+```{r}
+source('utile.R')
+
+SMT <- 1502 
+SVN <- 3454
+SRA <- 4450
+SSM <- 9432
+Nsimu <- 100
+Nrepet <- 100
+
+
+mt <- MersenneTwister(Nsimu,Nrepet,SMT)
+vn <- VonNeumann(Nsimu,Nrepet,SVN)
+ra <- RANDU(Nsimu,Nrepet,SRA)
+sm <- StandardMinimal(Nsimu,Nrepet,SSM)
+
+PvaleurMT <- Runs(mt,32)
+PvaleurVN <- Runs(vn,14)
+PvaleurRA <- Runs(ra,31)
+PvaleurSM <- Runs(sm,31)
+cat("PValeur MersenneTwister : ",PvaleurMT, "\nPValeur VonNeumann : ",PvaleurVN, "\nPValeur RANDU : ",PvaleurRA, "\nPValeur StandardMinimal : ",PvaleurSM)
+```
+Les générateurs de Von Neumann et RANDU donnent une PValeur inférieure à 0.01 : nous pouvons en déduire que les séquences ne sont pas aléatoires au sens du test des runs.
+
+## Q5
+```{r}
+source('utile.R')
+
+SMT <- 1502 
+SVN <- 3454
+SRA <- 4450
+SSM <- 9432
+Nsimu <- 100
+Nrepet <- 100
+
+
+mt <- runif(MersenneTwister(Nsimu,Nrepet,SMT))
+order.test(mt, d=4, echo=FALSE)$p.val
+vn <- runif(VonNeumann(Nsimu,Nrepet,SVN))
+order.test(vn, d=4, echo=FALSE)$p.val
+ra <- runif(RANDU(Nsimu,Nrepet,SRA))
+order.test(ra, d=4, echo=FALSE)$p.val
+sm <- runif(StandardMinimal(Nsimu,Nrepet,SSM))
+order.test(sm, d=4, echo=FALSE)$p.val
+
+
+```
+Les valeurs sont supérieures à 1%. L'hypothèse que les observations des séquences sont issues d'une loi uniforme n'est pas rejetée.
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Tests
+```{r}
+source('utile.R')
+
+
+
+```
